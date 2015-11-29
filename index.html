@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <script data-require="jquery@*" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cosmo/bootstrap.min.css" />
+    <link data-require="bootstrap@*" data-semver="3.3.5" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <script data-require="bootstrap@*" data-semver="3.3.5" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script data-require="angularjs@1.4.4" data-semver="1.4.4" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+  </head>
+
+  <body ng-app="myApp">
+    <div ng-controller="myCtrl as vm">
+      <div class="row">
+        <div class="col-md-12">
+          <label>Carga</label>
+        </div>
+        <input type="number" class="col-md-12" ng-model="vm.carga" />
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label>Taxa de Solo</label>
+        </div>
+        <input type="number" class="col-md-12" ng-model="vm.txSolo" />
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label style="color:green;">Área = </label><label ng-if="vm.carga && vm.txSolo">{{vm.area = (vm.carga / vm.txSolo).toFixed(2)}}m²</label>
+        </div>
+      </div>
+      <hr />
+      
+      <div class="row">
+        <div class="col-md-12">
+          <label>a0</label>
+        </div>
+        <input type="number" class="col-md-12" ng-model="vm.a0" />
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <label>b0</label>
+        </div>
+        <input type="number" class="col-md-12" ng-model="vm.b0" />
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <label style="color:green;">a = </label><label ng-if="vm.a0 && vm.b0">{{vm.ab = (vm.a0 / vm.b0).toFixed(2)}}b</label>
+        </div>
+      </div>
+      
+      <hr/>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <label style="color:green;">b = </label><label ng-if="vm.area && vm.ab">{{vm.b = (vm.Math.sqrt(vm.area / vm.ab)).toFixed(2)}}m</label>
+        </div>
+        <div class="col-md-12" ng-if="vm.b">
+          {{vm.b}} >= 0.6
+          <label>{{vm.b >= 0.6 ? "OK !" : "Não passou :("}}</label>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <label style="color:green;">a = </label><label ng-if="vm.b && vm.ab">{{vm.a = (vm.b * vm.ab).toFixed(2)}}m</label>
+        </div>
+        <div class="col-md-12" ng-if="vm.a && vm.b">
+          {{(vm.a / vm.b).toFixed(2)}} <= 2.5
+          <label>{{(vm.a / vm.b).toFixed(2) <= 2.5 ? "OK !" : "Não passou :("}}</label>
+        </div>
+      </div>
+      
+      <hr />
+      
+      <div ng-if="(vm.a / vm.b).toFixed(1) > 2.5 || vm.b < 0.6">
+        
+        <button ng-click="vm.recalcular()">Recalcular !</button>
+
+        <div class="row">
+          <div class="col-md-12">
+            <label style="color:green;">b Recalculado = </label><label ng-if="vm.bRecalculado">{{vm.bRecalculado}}m</label>
+          </div>
+          <div class="col-md-12" ng-if="vm.bRecalculado">
+            {{vm.bRecalculado}} >= 0.6
+            <label>{{vm.bRecalculado >= 0.6 ? "OK !" : "Não passou :("}}</label>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-12">
+            <label style="color:green;">a Recalculado = </label><label ng-if="vm.aRecalculado">{{vm.aRecalculado}}m</label>
+          </div>  
+          <div class="col-md-12" ng-if="vm.aRecalculado && vm.bRecalculado">
+            {{(vm.aRecalculado / vm.bRecalculado).toFixed(2)}} <= 2.5
+            <label>{{(vm.aRecalculado / vm.bRecalculado).toFixed(2) <= 2.5 ? "OK !" : "Não passou :("}}</label>
+          </div>
+        </div>
+        <hr />  
+      </div>
+      
+    </div>
+  </body>
+
+</html>
